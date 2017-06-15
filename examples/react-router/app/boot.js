@@ -2,21 +2,27 @@ import React from 'react'
 import DOM from 'react-dom'
 import { Router } from 'react-router'
 import createBrowserHistory from 'history/createBrowserHistory'
+import { AppContainer } from 'react-hot-loader'
 import Repo from './repo'
-import Application from './views/application'
+import Layout from './views/layout'
 
-// We're creating a browser history first, so that we can pass it
-// into Microcosm. This lets us take advantage of the router when
-// dispatching actions.
-//
-// See ./effects/routing.js
+const el = document.getElementById('app')
 const browserHistory = createBrowserHistory()
+const repo = new Repo({ maxHistory: Infinity, browserHistory })
 
-const repo = new Repo({ browserHistory })
+function render() {
+  DOM.render(
+    <Router history={browserHistory}>
+      <AppContainer>
+        <Layout repo={repo} />
+      </AppContainer>
+    </Router>,
+    el
+  )
+}
 
-DOM.render(
-  <Router history={browserHistory}>
-    <Application repo={repo} />
-  </Router>,
-  document.getElementById('app')
-)
+render()
+
+if (module.hot) {
+  module.hot.accept('./views/layout', render)
+}

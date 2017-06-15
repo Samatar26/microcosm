@@ -47,7 +47,8 @@
     ]
   },
   "dependencies": {
-    "form-serialize": "^0.7.2"
+    "form-serialize": "^0.7.2",
+    "react-router": "^4.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
