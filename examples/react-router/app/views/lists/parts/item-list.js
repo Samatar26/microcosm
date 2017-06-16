@@ -1,6 +1,5 @@
 import React from 'react'
 import ActionButton from 'microcosm/addons/action-button'
-
 import { removeItem } from '../../../actions/items'
 
 function Item({ id, name }) {
