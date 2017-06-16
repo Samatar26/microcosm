@@ -19,7 +19,7 @@ class ListForm extends React.PureComponent {
     const { name } = this.state
 
     return (
-      <ActionForm action={addListAndVisit} onSubmit={this.reset}>
+      <ActionForm action={addList} onSubmit={this.reset}>
         <div className="textfield">
           <label htmlFor="list-name">Name</label>
           <input
