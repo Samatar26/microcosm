@@ -173,6 +173,55 @@ describe('::getModel', function() {
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
+  it('updates state within child views if domain state changes', async function() {
+    const ViewComponent = withSend(function({ send, color }) {
+      return (
+        <div onClick={() => send('updateColor', 'yellow')}>
+          {color}
+        </div>
+      )
+    })
+    class MyPresenter extends Presenter {
+      getModel() {
+        return {
+          color: state => state.color
+        }
+      }
+      render() {
+        return <ViewComponent color={this.model.color} />
+      }
+    }
+
+    const updateColor = function(color) { color }
+    const repo = new Microcosm({ batch: true })
+    repo.addDomain(null, {
+      getInitialState() {
+        return {
+          color: 'red'
+        }
+      },
+      register() {
+        return {
+          [updateColor]: this.updateColor
+        }
+      },
+      updateColor(state, color) {
+        return { ...state, color }
+      }
+    })
+
+    const presenter = mount(<MyPresenter repo={repo} />)
+
+    expect(presenter.text()).toContain('red')
+    expect(presenter.text()).not.toContain('yellow')
+
+    presenter.simulate('click')
+    await repo.history.wait()
+
+    expect(presenter.text()).not.toContain('red')
+    expect(presenter.text()).toContain('yellow')
+  })
+
   describe('when first building a model', function() {
     it('passes the repo as the second argument of model callbacks', function() {
       expect.assertions(1)
