@@ -249,7 +249,7 @@ class PresenterMediator extends React.PureComponent {
   }
 
   updateModel(props: Object, state: Object) {
-    let bindings = this.presenter.getModel(props, state)
+    let bindings = this.presenter.getModel(props, state, this.repo)
 
     this.model.bind(bindings)
 

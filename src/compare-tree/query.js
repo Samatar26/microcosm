@@ -23,14 +23,19 @@ class Query extends Emitter {
     this.keyPaths = keys
   }
 
-  trigger(state: Object) {
-    let args = ['change']
+  extract(state: Object) {
+    let len = this.keyPaths.length
+    let data = Array(len)
 
-    for (var i = 0, len = this.keyPaths.length; i < len; i++) {
-      args[i + 1] = get(state, this.keyPaths[i])
+    for (var i = 0; i < len; i++) {
+      data[i] = get(state, this.keyPaths[i])
     }
 
-    this._emit(...args)
+    return data
+  }
+
+  trigger(state: Object) {
+    this._emit('change', ...this.extract(state))
   }
 
   isAlone() {

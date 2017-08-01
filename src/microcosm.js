@@ -5,6 +5,7 @@
  */
 
 import Action from './action'
+import Observable from 'zen-observable'
 import Emitter from './emitter'
 import History from './history'
 import DomainEngine from './domain-engine'
@@ -473,6 +474,21 @@ class Microcosm extends Emitter implements Domain {
 
   parallel(actions: Action[]) {
     return this.append('GROUP').link(actions)
+  }
+
+  observe(keys, callback = n => n) {
+    return new Observable(observer => {
+      let handler = function() {
+        observer.next(callback(...arguments))
+      }
+
+      let query = this.changes.on(keys, handler, observer)
+      let initial = query.extract(this.state)
+
+      handler(...initial)
+
+      return () => this.changes.off(keys, handler, observer)
+    })
   }
 }
 

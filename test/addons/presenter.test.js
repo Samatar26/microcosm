@@ -109,7 +109,7 @@ describe('::getModel', function() {
     class MyPresenter extends Presenter {
       getModel() {
         return {
-          color: state => state.color
+          color: this.repo.observe('color')
         }
       }
       view({ color }) {
@@ -224,9 +224,9 @@ describe('::getModel', function() {
       })
 
       class Namer extends Presenter {
-        getModel(props) {
+        getModel({ prefix }, state, repo) {
           return {
-            name: state => props.prefix + ' ' + state.name
+            name: repo.observe('name', name => prefix + ' ' + name)
           }
         }
         view({ name }) {
@@ -409,9 +409,9 @@ describe('::setup', function() {
         })
       }
 
-      getModel() {
+      getModel(_props, _state, repo) {
         return {
-          prop: state => state.prop
+          prop: repo.observe('prop')
         }
       }
 
@@ -490,7 +490,7 @@ describe('::ready', function() {
 
       getModel() {
         return {
-          prop: state => state.prop
+          prop: this.repo.observe('prop')
         }
       }
     }
@@ -772,7 +772,7 @@ describe('purity', function() {
 
     class Namer extends Presenter {
       getModel() {
-        return { name: state => state.name }
+        return { name: this.repo.observe('name') }
       }
 
       get view() {
@@ -860,7 +860,7 @@ describe('Efficiency', function() {
 
     const model = jest.fn(function() {
       return {
-        color: state => state.color
+        color: this.repo.observe('color')
       }
     })
 
