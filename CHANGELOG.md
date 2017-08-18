@@ -1,6 +1,12 @@
 # Changelog
 
-# 12.10.0
+## Edge
+
+- Domain::setup and constructors receive the key they were mounted at via
+  `options.key`.
+
+
+## 12.10.0
 
 - Microcosm ships with ES6 and UMD bundles
 - Domains and Effects can implement a `defaults` static object to
@@ -9,7 +15,7 @@
   without a fallback.
 - `repo.append(action, state)` should reconcile history
 
-# 12.9.0
+## 12.9.0
 
 - Added new `repo.parallel` method. This returns an action that
   represents a group of actions processing in parallel.
